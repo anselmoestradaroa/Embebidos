@@ -8,6 +8,7 @@ Desarrollar un programa para que lea el valor analógico
 de la entrada A0 y lo escriba por la terminal cada
 5 segundos, pero sin usar la función delay(), usar en
 cambio el una interrupción con el reloj (Timer) interno.
+
 '''
 from machine import ADC, Timer
 analogValue = ADC(26)

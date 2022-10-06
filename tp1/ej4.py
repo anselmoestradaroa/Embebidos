@@ -46,8 +46,7 @@ while True:
         file.write("Año" + "," + "Mes" + "," + "Dia" + "," + "Hora" + "," + "Minuto" + "," + "Segundo" + "," + "A0" + "," + "A1" + "," + "A2" + "\n")
         print("AAAA" + "/" + "MM" + "/" + "DD" + "  " + "HH" + ":" + "MM" + ":" + "SS" + "   " + " A0  " + "   " + " A1  " + "  " + " A2  ")
         file.flush()
-        timer.init(period = int(tMuestreo*1000), mode=Timer.PERIODIC, callback = writeFile )
-        
+        timer.init(period = int(tMuestreo*1000), mode=Timer.PERIODIC, callback = writeFile )        
         
     if comando == "off\n" and isOn:# Si escribes OFF y esta funcionando
         sys.stdout.write(DATOFF)

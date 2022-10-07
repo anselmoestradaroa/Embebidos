@@ -1,4 +1,5 @@
 import processing.serial.*;
+
 Serial myPort;
 Boolean isOn = false;
 String strSerial = "";
@@ -11,11 +12,16 @@ void setup(){// Inicializacion de las variables
   myPort = new Serial(this, Serial.list()[1], 9600);
   myPort.write("0\n");//Envio un cero para apagar la adquisición de datos
   myPort.bufferUntil(36);// Almacena en el buffer hasta el caracter $  
+  //Grafico(String xl, String yl, String title, int xPos, int yPos, int w, int h)
+
 }
 
-void draw(){  
+void draw(){ 
+    background(255);// Fondo blanco
+    Grafico miGrafico = new Grafico("Valor de X", "Valor de Y", "Titulo del grafico", 10, 10, width, height);
+  miGrafico.linea(false);
   fill(0);// Color negro para las letras
-  background(255);// Fondo blanco
+
   textSize(16);// tamaño del texto
   text("Presiona cualquier tecla para comenzar a transmitir el dato analógico", 100, 50);
 //size(400, 400);
@@ -36,10 +42,10 @@ void serialEvent(Serial p) {
 
 void keyPressed(){// Cuando se presiona una tecla
   isOn = !isOn;// toogle isOn
-  btn(isOn);// Envio el valor de isOn en formato int.
+  receiveData(isOn);// Envio el valor de isOn en formato int.
 }
 
-void btn(Boolean isOn){
+void receiveData(Boolean isOn){
   if(isOn){
     myPort.write("1\n");
   }else{

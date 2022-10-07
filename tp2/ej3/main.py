@@ -17,5 +17,5 @@ while True:
         isOn = False
         estadoLed = 0
     led.value(isOn)
-    sys.stdout.write(bytes(estadoLed))
+    sys.stdout.write( str(estadoLed))
     comandoPC = ""

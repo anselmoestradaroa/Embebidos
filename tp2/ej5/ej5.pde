@@ -12,14 +12,15 @@ void setup(){// Inicializacion de las variables
   myPort = new Serial(this, Serial.list()[1], 9600);
   myPort.write("0\n");//Envio un cero para apagar la adquisición de datos
   myPort.bufferUntil(36);// Almacena en el buffer hasta el caracter $  
-  //Grafico(String xl, String yl, String title, int xPos, int yPos, int w, int h)
+  Grafico miGrafico = new Grafico(0,0, width, height, "Este es un titulo");
+  miGrafico.createLineal("ejex", "ejey", true);
 
 }
 
 void draw(){ 
     background(255);// Fondo blanco
-    Grafico miGrafico = new Grafico("Valor de X", "Valor de Y", "Titulo del grafico", 10, 10, width, height);
-  miGrafico.linea(false);
+    //Grafico miGrafico = new Grafico("Valor de X", "Valor de Y", "Titulo del grafico", 10, 10, width, height);
+  //miGrafico.linea(false);
   fill(0);// Color negro para las letras
 
   textSize(16);// tamaño del texto

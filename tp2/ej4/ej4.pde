@@ -13,7 +13,7 @@ void setup(){// Inicializacion de las variables
 }
 
 void draw(){  
-  fill(0);
+  fill(128);
   background(255);
   textSize(16);
   text("Presiona cualquier tecla para comenzar a transmitir el dato analógico", 100, 50);
@@ -23,7 +23,7 @@ void draw(){
 }
 
 void serialEvent(Serial p) { 
-  strSerial = p.readString().replace("$",""); 
+  strSerial = p.readString().replace("$","");
 } 
 
 void keyPressed(){

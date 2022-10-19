@@ -3,6 +3,8 @@ import grafica.*;
 
 int data;
 // Para el histograma
+GPoint[] vectorPrueba;
+GPointsArray arregloPrueba;
 
 GPoint[] valoresHistograma;
 GPointsArray datosHistograma = new GPointsArray(10);// en la pantalla muestro DECILES
@@ -16,6 +18,11 @@ Serial miPuerto;
 Boolean isOn = false; // isOn = true si la adquisición de datos está activada
 
 void setup() {
+  // Prueba - Comienzo
+  vectorPrueba = new GPoint[10];
+  initGArray(vectorPrueba);
+  arregloPrueba = new GPointsArray(vectorPrueba);
+
   // Configuracion de la ventana
   size(700, 1000);//Tamaño de la ventana
   surface.setTitle("Ejecicio 5 - Trabajo práctico N2.");// Título de la ventana
@@ -32,36 +39,12 @@ void setup() {
   text("Presiona cualquier tecla para comenzar a transmitir el dato analógico", 100, 50);
 
   // Para el histograma
-  println("Cantidad de valores de datosHistograma " + datosHistograma.getNPoints() );
-  for(int i = 0 ; i < 10; i++){
-    datosHistograma.add(i, i*10);
-  }
-  println("Cantidad de valores de datosHistograma " + datosHistograma.getNPoints() );
-    histograma.setPoints(datosHistograma);
+  histograma = new GPlot(this);
+  valoresHistograma = new GPoint[10];
+  decilActual = new GPoint(5, 5);
 }
 
 void draw() {
-
-  histograma.setPoints(datosHistograma);
-  // Configuracion del histograma
-  
-  
-  histograma.startHistograms(GPlot.VERTICAL);
-  histograma.setPos(100,500);
-  histograma.setTitleText("Histograma");
-  histograma.getXAxis().setAxisLabelText("Decil");
-  histograma.getYAxis().setAxisLabelText("Cant Datos");
-  histograma.setPoints(datosHistograma);
-  
-  histograma.beginDraw();
-  histograma.drawBackground();
-  histograma.drawBox();
-  histograma.drawYAxis();
-  histograma.drawTitle();
-  histograma.drawHistograms();
-  histograma.endDraw();
-
-
 	//println("Vector datosHistograma");
 	//imprimirGArray(datosHistograma);
 
@@ -79,10 +62,6 @@ println("El valor de data dentro del serialEvent es " + data);
   }catch(NullPointerException e){
     println("Error al recuperar el dato");
     data = -1;
-  }
-
-    for(int i = 0 ; i < datosHistograma.getNPoints(); i++){
-    datosHistograma.add(i, i*10);
   }
 }
 
@@ -110,7 +89,7 @@ void imprimirGArray(GPointsArray arregloDeDatos){
 
 void initGArray(GPoint[] vectorDeDatos){
   println(vectorDeDatos.length);
-  		vectorDeDatos[0].setXY(1,2);
+  		vectorDeDatos[1].setXY(1,2);
 	for(int i = 0; i < vectorDeDatos.length-1; i++){
 		vectorDeDatos[0].setXY(1,2);
 	}

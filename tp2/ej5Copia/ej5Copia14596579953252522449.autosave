@@ -1,38 +1,32 @@
 import grafica.*;
 import java.util.Random;
-int i = 0;
-public GPlot plot3;// Grafico
-public float[] gaussianStack;// Array float con los valores del histograma
-public int gaussianCounter;// contador
-public Random r;// variable aleatoria
+
+public GPlot plot3;
+public GPointsArray polygonPoints;
+public float[] gaussianStack;
+public int gaussianCounter;
+public Random r;
 
 public void setup() {
   size(850, 660);
 
   // Prepare the points for the third plot
-  gaussianStack = new float[10];// arreglo de 10 posiciones por estar trabajando con los deciles de un histograma
+  gaussianStack = new float[10];// en deciles
   gaussianCounter = 0;
-
   r = new Random();
+  for (int i = 0; i < 20; i++) {
+    int index = int(gaussianStack.length/2 + (float) r.nextGaussian());
+    if (index >= 0 && index < gaussianStack.length) {
+      gaussianStack[index]++;
+      gaussianCounter++;
+    }
+  }
   
-  //for (int i = 0; i < 2; i++) {// Para i de cero a veinte
-  //  // index 
-  //  float valorGausiano = (float) r.nextGaussian();
-  //  int index = int(gaussianStack.length/2 + valorGausiano);
-
-  //  print(i + " : " + "valorGausiano " + valorGausiano + " ");
-  //  print("index :" + index + "\n");
-  //  if (index >= 0 && index < gaussianStack.length) {
-  //    gaussianStack[index]++;
-  //    gaussianCounter++;
-  //  }
-  //}
+  GPointsArray points3 = new GPointsArray(gaussianStack.length);
   
-  //GPointsArray points3 = new GPointsArray(gaussianStack.length);
-  
-  //for (int i = 0; i < gaussianStack.length; i++) {
-  //  points3.add(i + 0.5 - gaussianStack.length/2.0, gaussianStack[i]/gaussianCounter, "Percentil " + i);
-  //}
+  for (int i = 0; i < gaussianStack.length; i++) {
+    points3.add(i + 0.5 - gaussianStack.length/2.0, gaussianStack[i]/gaussianCounter, "Percentil " + i);
+  }
   
   // Setup for the third plot 
   plot3 = new GPlot(this);
@@ -47,7 +41,7 @@ public void setup() {
   //plot3.getYAxis().getAxisLabel().setTextAlignment(RIGHT);
   //plot3.getYAxis().getAxisLabel().setRelativePos(1);
   
-  //plot3.setPoints(points3);
+  plot3.setPoints(points3);
   plot3.startHistograms(GPlot.VERTICAL);
   plot3.getHistogram().setDrawLabels(true);
   plot3.getHistogram().setRotateLabels(true);
@@ -59,24 +53,16 @@ public void setup() {
   );
 }
 public void draw() {
-  i++;
   background(255);
   // Add one more point to the gaussian stack
-  
-  float valorGausiano = (float) r.nextGaussian();
-  int index = int(gaussianStack.length/2 + valorGausiano);
-  
-  print(i + " : " + "valorGausiano " + valorGausiano + " ");
-  print("index :" + index + "\n");
-  
+  int index = int(gaussianStack.length/2 + (float) r.nextGaussian());
   if (index >= 0 && index < gaussianStack.length) {
     gaussianStack[index]++;
     gaussianCounter++;
     
-    GPointsArray points3 = new GPointsArray(gaussianStack.length);//declaro un arreglo de puntos
+    GPointsArray points3 = new GPointsArray(gaussianStack.length);
     for (int i = 0; i < gaussianStack.length; i++) {
-      //                      X                              Y              LABEL
-      points3.add(i + 0.5 - gaussianStack.length/2.0, gaussianStack[i], "Decil " + i);//arreglo las componentes de x y de y en el ciclo
+      points3.add(i + 0.5 - gaussianStack.length/2.0, gaussianStack[i]/gaussianCounter, "Decil " + i);
     }
     plot3.setPoints(points3);
     plot3.getTitle().setText("Gaussian distribution (" + str(gaussianCounter) + " points)");

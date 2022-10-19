@@ -7,6 +7,7 @@ void setup(){// Inicializacion de las variables
   size(680, 460); // Tamaño de la pantalla
   surface.setTitle("Ejecicio 4 - Trabajo práctico N2.");// Titulo de la ventana
   myPort = new Serial(this, Serial.list()[1], 9600);
+  
   myPort.write("0\n");
   myPort.bufferUntil(36);// Almacene en el buffer hasta el caracter $
   

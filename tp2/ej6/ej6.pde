@@ -1,18 +1,65 @@
-import processing.serial.*;
+import processing.serial.*; // Para la comunicacion serial
+import controlP5.*;         // Para la GUI
+import grafica.*;           // Para los Graficos, Ya habia creado los graficos con esta librería, se que se pueden hacer graficos con ControlP5
 
-import controlP5.*;
-// INICIO desde el histograma
-import grafica.*;
-Serial myPort;
-int[] pilaDatos = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-GPlot plot3;// Grafico
-GPointsArray puntos = new GPointsArray(pilaDatos.length);
+Serial myPort; // Inicialización del puerto Serial
+
+// PARA EL HISTOGRAMA
+int[] pilaDatos = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}; // 10 Datos para el histograma
+GPlot miHistograma;// Objeto donde se dibuja el histograma
+GPointsArray pHistograma = new GPointsArray(pilaDatos.length); // Objeto con los puntos del histograma
 int cantDatos = 0;
-// FIN desde el histograma
+
+// PARA EL GRAFICO DE LINEA
+int i = 0;
+int nPoints = 100;// Cantidad maxima de datos
+GPointsArray ad0GrafLinea = new GPointsArray(nPoints);// AObjeto con los puntos del grafico de linea
+GPointsArray ad1GrafLinea = new GPointsArray(nPoints);// AObjeto con los puntos del grafico de linea
+GPointsArray ad2GrafLinea = new GPointsArray(nPoints);// AObjeto con los puntos del grafico de linea
+
+
+
+
+
+
+
+
 int tiempo = 30;
 Textfield tf_muestreo;
 
 ControlP5 cp5;// Creo objeto ControlP5 donde se insertan las componentes de la GUI
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 void setup() {
   size(800, 600);
@@ -40,7 +87,7 @@ void setup() {
   ;
 
   tf_muestreo = cp5.addTextfield("tf_TiempoMuestreo") // Nombre del objeto tf ---> textfield
-    .setValue("30")                     // Valor predeterminado
+    .setValue("1")                     // Valor predeterminado
     .setSize(35, 30)                    // Tamaño del cuadro
     .setPosition(640, 30)               // Posición en la ventana
     .setLabel("")                       // Sin etiqueta
@@ -71,22 +118,22 @@ void setup() {
 
   // INICIO setup desde el histograma
   // INICIALIZO EL GRAFICO
-	plot3 = new GPlot(this);
-	plot3.setPos(0, 0);
-	plot3.setDim(300, 200);
-	//plot3.setYLim(-0.02, 0.45);
-	//plot3.setXLim(-5, 5);
-	plot3.getTitle().setText("Histograma con (" + str(cantDatos) + " muestras)");
-	plot3.getTitle().setTextAlignment(LEFT);
-	plot3.getTitle().setRelativePos(0);
-	plot3.getYAxis().getAxisLabel().setText("Cantidad de Muestras");
-	plot3.getYAxis().getAxisLabel().setTextAlignment(RIGHT);
-	plot3.getYAxis().getAxisLabel().setRelativePos(1);
-	plot3.setPoints(puntos);
-	plot3.startHistograms(GPlot.VERTICAL);
-	plot3.getHistogram().setDrawLabels(true);
-	plot3.getHistogram().setRotateLabels(true);
-	plot3.getHistogram().setBgColors(new color[] {
+	miHistograma = new GPlot(this);
+	miHistograma.setPos(0, 0);
+	miHistograma.setDim(300, 200);
+	//miHistograma.setYLim(-0.02, 0.45);
+	//miHistograma.setXLim(-5, 5);
+	miHistograma.getTitle().setText("Histograma con (" + str(cantDatos) + " muestras)");
+	miHistograma.getTitle().setTextAlignment(LEFT);
+	miHistograma.getTitle().setRelativePos(0);
+	miHistograma.getYAxis().getAxisLabel().setText("Cantidad de Muestras");
+	miHistograma.getYAxis().getAxisLabel().setTextAlignment(RIGHT);
+	miHistograma.getYAxis().getAxisLabel().setRelativePos(1);
+	miHistograma.setPoints(pHistograma);
+	miHistograma.startHistograms(GPlot.VERTICAL);
+	miHistograma.getHistogram().setDrawLabels(true);
+	miHistograma.getHistogram().setRotateLabels(true);
+	miHistograma.getHistogram().setBgColors(new color[] {
 	color(0, 0, 255, 50), color(0, 0, 255, 100), 
 	color(0, 0, 255, 150), color(0, 0, 255, 200)
 	}
@@ -101,41 +148,86 @@ void setup() {
   cp5.addLabel("lbl_Fecha")                                   // Nombre del objeto lbl ---> label
     .setValue("Acá debe ir la fecha actual de la compu")      // String del Label
     .setSize(100, 30)                                         // Tamaño del label
-    .setPosition(400, 400)                                     // Posición en la ventana
+    .setPosition(400, 400)                                    // Posición en la ventana
     .setFont(fontH2)                                          // Tamaño de fuente del texto
   ;
 }
 
 void draw(){
-  	//background(255);
-	plot3.setPoints(puntos);
-	plot3.getTitle().setText("Histograma con (" + str(cantDatos) + " muestras)");
-	plot3.beginDraw();
-	plot3.drawBackground();
-	plot3.drawBox();
-	plot3.drawYAxis();
-	plot3.drawTitle();
-	plot3.drawHistograms();
-	plot3.endDraw();
+  GPlot plot = new GPlot(this);
+  plot.setPos(0, 300);
+  plot.setDim(300, 200);
+  plot.setTitleText("Valor A0");
+  plot.getXAxis().setAxisLabelText("Muestra");
+  plot.getYAxis().setAxisLabelText("Valor Entero");
+  // Agrego los puntos, en este caso no hay puntos
+  plot.setPoints(ad0GrafLinea);
+
+  plot.addLayer("AD1", ad1GrafLinea);
+
+  plot.addLayer("AD2", ad2GrafLinea);
+  
+
+
+  // Dibujo!
+  plot.defaultDraw();
+  //plot.beginDraw();
+  //plot.endDraw();
+
+  //background(255);
+	miHistograma.setPoints(pHistograma);
+	miHistograma.getTitle().setText("Histograma con (" + str(cantDatos) + " muestras)");
+	miHistograma.beginDraw();
+	miHistograma.drawBackground();
+	miHistograma.drawBox();
+	miHistograma.drawYAxis();
+	miHistograma.drawTitle();
+	miHistograma.drawHistograms();
+	miHistograma.endDraw();
 }
 
 void serialEvent(Serial p) {
 	String strSerial = p.readString();
 	int[] ad = int( split(strSerial, "," ) );
 	println( ad[0] + " " + ad[1] + " " + ad[2] + " ");
-
-
 	cantDatos++;
 	background(255);
-	// int valorMedicion = int( p.readString().replace("$","") );// Paso el valor de la medida a entero
+
 	int indice = (9 * ad[0])/65535;
-	// println("El valor de la medida " + cantDatos + " es : " + valorMedicion + " y se encuentra en el decil " + indice);
+
 	pilaDatos[indice]++;
 	imprimirArreglo(pilaDatos);
 // 
-	puntos = new GPointsArray(pilaDatos.length);
+	pHistograma = new GPointsArray(pilaDatos.length);
 	for(int i = 0; i < pilaDatos.length; i++)
-	puntos.add(i, pilaDatos[i], "Decil " + i);
+	pHistograma.add(i, pilaDatos[i], "Decil " + i);
+
+GPlot plot = new GPlot(this);
+  if( cantDatos < nPoints ){    
+    ad0GrafLinea.add(cantDatos, ad[0]);// Agrego punto
+    ad1GrafLinea.add(cantDatos, ad[1]);// Agrego punto
+    ad2GrafLinea.add(cantDatos, ad[2]);// Agrego punto
+  }else{
+    cantDatos++;
+    ad0GrafLinea.add(cantDatos, ad[0]);// agrego punto
+    ad0GrafLinea.remove(0);// elimino el primer dato para que no se muestre 
+
+    ad1GrafLinea.add(cantDatos, ad[1]);// agrego punto
+    ad1GrafLinea.remove(0);// elimino el primer dato para que no se muestre 
+
+    ad2GrafLinea.add(cantDatos, ad[2]);// agrego punto
+    ad2GrafLinea.remove(0);// elimino el primer dato para que no se muestre 
+  }
+  // Add the ad0GrafLinea
+  plot.setPoints(ad0GrafLinea);
+
+  plot.addLayer("AD1", ad1GrafLinea);
+
+  plot.addLayer("AD2", ad2GrafLinea);
+  // Draw it!
+  plot.activatePointLabels();
+  plot.defaultDraw();
+
 }
 
 void imprimirArreglo(int[] a){

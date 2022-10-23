@@ -3,6 +3,9 @@ import controlP5.*;         // Para la GUI
 import grafica.*;           // Para los Graficos, Ya habia creado los graficos con esta librería, se que se pueden hacer graficos con ControlP5
 Serial myPort;							// Inicialización del puerto Serial
 
+String fileNameFromSave=""; 
+int status=0;
+
 // PARA EL HISTOGRAMA
 int[] pilaDatos = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}; // 10 Datos para el histograma
 GPlot miHistograma;// Objeto donde se dibuja el histograma
@@ -252,11 +255,11 @@ void btn_Comenzar(){
 	// Limpio el grafico de lineas
 
 
-		while(ad0GrafLinea.getNPoints() != 0){
-			ad0GrafLinea.remove(0);
-			ad1GrafLinea.remove(0);
-			ad2GrafLinea.remove(0);
-		}
+	while(ad0GrafLinea.getNPoints() != 0){
+		ad0GrafLinea.remove(0);
+		ad1GrafLinea.remove(0);
+		ad2GrafLinea.remove(0);
+	}
 }
 
 void btn_Finalizar(){
@@ -275,3 +278,31 @@ void btn_Pausar(){
 		myPort.write("1" + tiempo + "\n\r");
 	}
 }
+
+void btn_Guardar(){
+  selectOutput("Elije el nombre del archivo...", "fileSelected");
+}
+
+void fileSelected(File selection) {
+  if (selection == null) {
+    println("Window was closed or the user hit cancel.");
+    status=1;
+  } else {
+    println("User saves as " + selection.getAbsolutePath());
+
+    String[] saveFile = new String[10];// Almaceno el histograma
+    saveFile[0] = str(pilaDatos[0]);
+    saveFile[1] = str(pilaDatos[1]);
+    saveFile[2] = str(pilaDatos[2]);
+    saveFile[3] = str(pilaDatos[3]);
+    saveFile[4] = str(pilaDatos[4]);
+    saveFile[5] = str(pilaDatos[5]);
+    saveFile[6] = str(pilaDatos[6]);
+    saveFile[7] = str(pilaDatos[7]);
+    saveFile[8] = str(pilaDatos[8]);
+    saveFile[9] = str(pilaDatos[9]);
+    saveStrings(selection.getAbsolutePath(), saveFile);
+    status=2; 
+    fileNameFromSave = selection.getAbsolutePath();
+  }//else
+}//func 
